@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberSec Academy</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        /* Сканди палитра и шрифты */
+        :root {
+            --bg-color: #f4f6f5;      /* Мягкий светлый фон */
+            --card-bg: #ffffff;       /* Чистый белый для карточек */
+            --text-main: #2b3a32;     /* Глубокий хвойно-серый текст */
+            --text-muted: #7a8a81;    /* Приглушенный серый */
+            --accent-color: #5c7465;  /* Шалфейно-зеленый (сканди-акцент) */
+            --accent-light: #e8edea;  /* Светлый фон для активных элементов */
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        header {
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin: 0 0 4px 0;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin: 0;
+        }
+
+        /* Навигация (Вкладки) */
+        .nav-tabs {
+            display: flex;
+            background: #e4e8e6;
+            padding: 4px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            border: none;
+            background: none;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn.active {
+            background: var(--card-bg);
+            color: var(--text-main);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+        }
+
+        /* Контент */
+        .tab-content {
+            display: none;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .tab-content.active {
+            display: flex;
+        }
+
+        /* Сканди-карточки */
+        .card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(0,0,0,0.02);
+        }
+
+        .card h2 {
+            font-size: 18px;
+            margin: 0 0 10px 0;
+        }
+
+        .card p {
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--text-main);
+            margin: 0 0 16px 0;
+        }
+
+        /* Кнопки */
+        .btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            font-weight: 500;
+            width: 100%;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn:opacity {
+            opacity: 0.9;
+        }
+
+        /* Стили для игры */
+        .game-option {
+            background: var(--bg-color);
+            border: 1px solid transparent;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .game-option:hover {
+            border-color: var(--accent-color);
+            background: var(--accent-light);
+        }
+
+        .feedback {
+            margin-top: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>CyberSec Academy</h1>
+        <p class="subtitle">Изучение ИБ в минималистичном формате</p>
+    </header>
+
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('learning')">📚 Изучение</button>
+        <button class="tab-btn" onclick="switchTab('game')">🎮 Игра</button>
+    </div>
+
+    <div id="learning" class="tab-content active">
+        <div class="card">
+            <h2>Урок 1: Что такое фишинг?</h2>
+            <p>Фишинг — это вид интернет-мошенничества, цель которого — получить доступ к вашим конфиденциальным данным (паролям, картам). Злоумышленники маскируются под известные бренды, банки или сервисы.</p>
+            <button class="btn" onclick="markAsRead()">Изучено +10 XP</button>
+        </div>
+    </div>
+
+    <div id="game" class="tab-content">
+        <div class="card">
+            <h2>Ситуация: Странный звонок</h2>
+            <p>Вам звонит «сотрудник безопасности банка» и сообщает о подозрительной операции. Назовите код из SMS, чтобы заблокировать перевод. Ваши действия?</p>
+            
+            <div class="game-option" onclick="checkAnswer(false, '❌ Неверно! Банк никогда не запрашивает коды из SMS. Вы только что отдали деньги мошенникам.')">
+                Продиктую код, чтобы спасти деньги.
+            </div>
+            <div class="game-option" onclick="checkAnswer(true, '✅ Верно! Скандинавское хладнокровие. Нужно повесить трубку и перезвонить по официальному номеру банка.')">
+                Повешу трубку и проверю информацию в официальном приложении.
+            </div>
+
+            <div id="game-feedback" class="feedback"></div>
+        </div>
+    </div>
+
+    <script>
+        // Инициализация Telegram Web App
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand(); // Расширяем на весь экран
+
+        // Функция переключения вкладок
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Логика проверки ответа в игре
+        function checkAnswer(isCorrect, message) {
+            const feedbackEl = document.getElementById('game-feedback');
+            feedbackEl.style.display = 'block';
+            feedbackEl.innerText = message;
+            feedbackEl.style.color = isCorrect ? '#3d6147' : '#824c4c';
+            
+            if (isCorrect) {
+                // Пример отправки данных обратно в бота (например, начисление очков)
+                tg.sendData(JSON.stringify({action: "game_passed", points: 20}));
+            }
+        }
+
+        function markAsRead() {
+            tg.showAlert("Вы успешно прошли первый урок!");
+            tg.sendData(JSON.stringify({action: "lesson_completed", lesson: 1}));
+        }
+    </script>
+</body>
+</html>
