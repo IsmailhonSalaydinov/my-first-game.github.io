@@ -2,24 +2,23 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CyberSec Mini App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberSec Academy</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
+        /* Сканди палитра и шрифты */
         :root {
-            --bg-color: #f4f6f5;
-            --card-bg: #ffffff;
-            --text-main: #2b3a32;
-            --text-muted: #7a8a81;
-            --accent-color: #5c7465;
-            --accent-light: #e8edea;
-            --threat-color: #c06c5c; /* Мягкий сканди-красный */
-            --safe-color: #8da394;   /* Мягкий сканди-зеленый */
-            --border-radius: 16px;
+            --bg-color: #f4f6f5;      /* Мягкий светлый фон */
+            --card-bg: #ffffff;       /* Чистый белый для карточек */
+            --text-main: #2b3a32;     /* Глубокий хвойно-серый текст */
+            --text-muted: #7a8a81;    /* Приглушенный серый */
+            --accent-color: #5c7465;  /* Шалфейно-зеленый (сканди-акцент) */
+            --accent-light: #e8edea;  /* Светлый фон для активных элементов */
+            --border-radius: 12px;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
             margin: 0;
@@ -28,19 +27,32 @@
             flex-direction: column;
             min-height: 100vh;
             box-sizing: border-box;
-            user-select: none;
         }
 
-        header { margin-bottom: 20px; }
-        h1 { font-size: 22px; font-weight: 600; margin: 0 0 4px 0; }
-        .subtitle { color: var(--text-muted); font-size: 13px; margin: 0; }
+        header {
+            margin-bottom: 24px;
+        }
 
+        h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin: 0 0 4px 0;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin: 0;
+        }
+
+        /* Навигация (Вкладки) */
         .nav-tabs {
             display: flex;
             background: #e4e8e6;
             padding: 4px;
-            border-radius: 12px;
-            margin-bottom: 16px;
+            border-radius: 10px;
+            margin-bottom: 20px;
         }
 
         .tab-btn {
@@ -51,64 +63,89 @@
             font-size: 14px;
             font-weight: 500;
             color: var(--text-muted);
-            border-radius: 8px;
             cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s ease;
         }
 
         .tab-btn.active {
             background: var(--card-bg);
             color: var(--text-main);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
         }
 
-        .tab-content { display: none; flex-direction: column; gap: 16px; }
-        .tab-content.active { display: flex; }
+        /* Контент */
+        .tab-content {
+            display: none;
+            flex-direction: column;
+            gap: 16px;
+        }
 
+        .tab-content.active {
+            display: flex;
+        }
+
+        /* Сканди-карточки */
         .card {
             background: var(--card-bg);
-            padding: 16px;
+            padding: 20px;
             border-radius: var(--border-radius);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(0,0,0,0.02);
         }
 
-        /* Контейнер для игрового холста */
-        .game-container {
-            position: relative;
-            width: 100%;
-            background: #fdfdfd;
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            border: 1px solid #e8edea;
+        .card h2 {
+            font-size: 18px;
+            margin: 0 0 10px 0;
         }
 
-        canvas {
-            display: block;
-            width: 100%;
-            height: 350px;
-            background: #fafbfa;
-        }
-
-        .game-ui {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 16px;
-            background: var(--card-bg);
-            border-bottom: 1px solid #e8edea;
+        .card p {
             font-size: 14px;
-            font-weight: 500;
+            line-height: 1.5;
+            color: var(--text-main);
+            margin: 0 0 16px 0;
         }
 
+        /* Кнопки */
         .btn {
             background-color: var(--accent-color);
             color: white;
             border: none;
-            padding: 14px;
+            padding: 12px 20px;
             border-radius: var(--border-radius);
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 500;
             width: 100%;
-            margin-top: 10px;
             cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn:opacity {
+            opacity: 0.9;
+        }
+
+        /* Стили для игры */
+        .game-option {
+            background: var(--bg-color);
+            border: 1px solid transparent;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .game-option:hover {
+            border-color: var(--accent-color);
+            background: var(--accent-light);
+        }
+
+        .feedback {
+            margin-top: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            display: none;
         }
     </style>
 </head>
@@ -116,204 +153,69 @@
 
     <header>
         <h1>CyberSec Academy</h1>
-        <p class="subtitle">Интерактивная защита данных</p>
+        <p class="subtitle">Изучение ИБ в минималистичном формате</p>
     </header>
 
     <div class="nav-tabs">
-        <button class="tab-btn active" onclick="switchTab('learning')">📚 База знаний</button>
-        <button class="tab-btn" onclick="switchTab('game')">🎮 Файрвол Аркада</button>
+        <button class="tab-btn active" onclick="switchTab('learning')">📚 Изучение</button>
+        <button class="tab-btn" onclick="switchTab('game')">🎮 Игра</button>
     </div>
 
     <div id="learning" class="tab-content active">
         <div class="card">
-            <h3>Добро пожаловать</h3>
-            <p style="color: var(--text-muted); font-size: 14px; line-height: 1.5;">
-                Изучайте материалы и переходите во вкладку игры, чтобы протестировать свою реакцию в симуляторе защиты трафика.
-            </p>
+            <h2>Урок 1: Что такое фишинг?</h2>
+            <p>Фишинг — это вид интернет-мошенничества, цель которого — получить доступ к вашим конфиденциальным данным (паролям, картам). Злоумышленники маскируются под известные бренды, банки или сервисы.</p>
+            <button class="btn" onclick="markAsRead()">Изучено +10 XP</button>
         </div>
     </div>
 
     <div id="game" class="tab-content">
-        <div class="game-container">
-            <div class="game-ui">
-                <div id="score-display">Счет: 0</div>
-                <div id="lives-display">Жизни: ❤️❤️❤️</div>
+        <div class="card">
+            <h2>Ситуация: Странный звонок</h2>
+            <p>Вам звонит «сотрудник безопасности банка» и сообщает о подозрительной операции. Назовите код из SMS, чтобы заблокировать перевод. Ваши действия?</p>
+            
+            <div class="game-option" onclick="checkAnswer(false, '❌ Неверно! Банк никогда не запрашивает коды из SMS. Вы только что отдали деньги мошенникам.')">
+                Продиктую код, чтобы спасти деньги.
             </div>
-            <canvas id="gameCanvas"></canvas>
+            <div class="game-option" onclick="checkAnswer(true, '✅ Верно! Скандинавское хладнокровие. Нужно повесить трубку и перезвонить по официальному номеру банка.')">
+                Повешу трубку и проверю информацию в официальном приложении.
+            </div>
+
+            <div id="game-feedback" class="feedback"></div>
         </div>
-        <button class="btn" id="start-btn" onclick="startGame()">Запустить Файрвол</button>
     </div>
 
     <script>
+        // Инициализация Telegram Web App
         const tg = window.Telegram.WebApp;
         tg.ready();
-        tg.expand();
+        tg.expand(); // Расширяем на весь экран
 
+        // Функция переключения вкладок
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
             document.getElementById(tabId).classList.add('active');
             event.currentTarget.classList.add('active');
-            if(tabId !== 'game') stopGame();
         }
 
-        // --- ИГРОВОЙ ДВИЖОК ---
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        
-        // Подгоняем реальное разрешение canvas под размеры на экране
-        canvas.width = canvas.clientWidth;
-        canvas.height = canvas.clientHeight;
-
-        let score = 0;
-        let lives = 3;
-        let gameRunning = false;
-        let packets = [];
-        let spawnTimer;
-        let animationFrameId;
-
-        class Packet {
-            constructor() {
-                this.radius = 18;
-                this.x = Math.random() * (canvas.width - this.radius * 2) + this.radius;
-                this.y = -this.radius;
-                this.speed = Math.random() * 1.5 + 1.5; // Скорость падения
-                this.isThreat = Math.random() > 0.4;   // 60% угроз, 40% чистых данных
-                this.color = this.isThreat ? '#c06c5c' : '#8da394';
-                this.label = this.isThreat ? '⚠️' : '🔹';
-            }
-
-            update() {
-                this.y += this.speed;
-            }
-
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = this.color;
-                ctx.fill();
-                ctx.closePath();
-
-                // Рисуем иконку внутри круга
-                ctx.fillStyle = '#ffffff';
-                ctx.font = '12px sans-serif';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(this.label, this.x, this.y);
-            }
-        }
-
-        function startGame() {
-            if (gameRunning) return;
-            gameRunning = true;
-            score = 0;
-            lives = 3;
-            packets = [];
-            document.getElementById('start-btn').innerText = "Перезапустить";
-            updateUI();
+        // Логика проверки ответа в игре
+        function checkAnswer(isCorrect, message) {
+            const feedbackEl = document.getElementById('game-feedback');
+            feedbackEl.style.display = 'block';
+            feedbackEl.innerText = message;
+            feedbackEl.style.color = isCorrect ? '#3d6147' : '#824c4c';
             
-            // Интервал спавна пакетов
-            clearInterval(spawnTimer);
-            spawnTimer = setInterval(() => {
-                if (gameRunning) packets.push(new Packet());
-            }, 900);
-
-            gameLoop();
-        }
-
-        function stopGame() {
-            gameRunning = false;
-            clearInterval(spawnTimer);
-            cancelAnimationFrame(animationFrameId);
-        }
-
-        function gameLoop() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            for (let i = packets.length - 1; i >= 0; i--) {
-                let p = packets[i];
-                p.update();
-                p.draw();
-
-                // Если пакет улетел за нижний край экрана
-                if (p.y - p.radius > canvas.height) {
-                    if (p.isThreat) {
-                        // Пропустили вирус — теряем жизнь
-                        lives--;
-                        updateUI();
-                        if (lives <= 0) gameOver();
-                    } else {
-                        // Чистый пакет долетел успешно — плюс балл
-                        score += 5;
-                        updateUI();
-                    }
-                    packets.splice(i, 1);
-                }
-            }
-
-            if (gameRunning) {
-                animationFrameId = requestAnimationFrame(gameLoop);
+            if (isCorrect) {
+                // Пример отправки данных обратно в бота (например, начисление очков)
+                tg.sendData(JSON.stringify({action: "game_passed", points: 20}));
             }
         }
 
-        // Обработка кликов / тапов по экрану
-        function handleInGameClick(clientX, clientY) {
-            if (!gameRunning) return;
-
-            const rect = canvas.getBoundingClientRect();
-            const clickX = clientX - rect.left;
-            const clickY = clientY - rect.top;
-
-            for (let i = packets.length - 1; i >= 0; i--) {
-                let p = packets[i];
-                // Вычисляем расстояние от клика до центра круга (гипотенуза)
-                let dist = Math.hypot(clickX - p.x, clickY - p.y);
-
-                if (dist <= p.radius + 10) { // +10 для удобства тапа на смартфонах
-                    if (p.isThreat) {
-                        // Уничтожили угрозу — получаем очки
-                        score += 10;
-                    } else {
-                        // Ошибка! Сбили чистые данные — штраф
-                        lives--;
-                        if (lives <= 0) gameOver();
-                    }
-                    packets.splice(i, 1);
-                    updateUI();
-                    break;
-                }
-            }
-        }
-
-        canvas.addEventListener('mousedown', (e) => handleInGameClick(e.clientX, e.clientY));
-        canvas.addEventListener('touchstart', (e) => {
-            const touch = e.touches[0];
-            handleInGameClick(touch.clientX, touch.clientY);
-        });
-
-        function updateUI() {
-            document.getElementById('score-display').innerText = `Счет: ${score}`;
-            document.getElementById('lives-display').innerText = `Жизни: ${'❤️'.repeat(Math.max(0, lives))}`;
-        }
-
-        function gameOver() {
-            stopGame();
-            ctx.fillStyle = 'rgba(43, 58, 50, 0.85)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 20px sans-serif';
-            ctx.textAlign = 'center';
-            ctx.fillText('СИСТЕМА ВЗЛОМАНА', canvas.width / 2, canvas.height / 2 - 10);
-            
-            ctx.font = '14px sans-serif';
-            ctx.fillStyle = '#e8edea';
-            ctx.fillText(`Ваш результат: ${score} очков`, canvas.width / 2, canvas.height / 2 + 20);
-            
-            document.getElementById('start-btn').innerText = "Попробовать снова";
-            
-            // Отправляем результат обратно в Telegram бот
-            tg.sendData(JSON.stringify({ action: "game_over", final_score: score }));
+        function markAsRead() {
+            tg.showAlert("Вы успешно прошли первый урок!");
+            tg.sendData(JSON.stringify({action: "lesson_completed", lesson: 1}));
         }
     </script>
 </body>
